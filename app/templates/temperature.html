@@ -1,0 +1,101 @@
+<html>
+<head>
+	{% if title %}
+		<title>{{title}} - home temperature</title>
+	{% else %}
+		<title>home temperature</title>
+	{% endif %}
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.4.6/rickshaw.min.css">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/2.7.4/d3.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/2.7.4/d3.layout.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.4.6/rickshaw.min.js"></script>
+
+	<style>
+	#chart_container {
+		position: relative;
+		display: inline-block;
+		font-family: Arial, Helvetiva, sans-serif;
+	}
+
+	#chart  {
+		position: inline-block;
+		left: 40px;
+	}
+
+	#y_axis {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 40px;
+	}
+
+	#legend {
+		display: inline-block;
+		vertical-align: top;
+		margin: 0 0 0 10px;
+	}
+	</style>
+</head>
+<body>
+	<div>Home temperature: <a href="/index">Home</a></div>
+	<hr>
+	<h1>{{period}} temperature!</h1>
+
+	<div id="chart_container">
+		<div id="y_axis"></div>
+		<div id="chart"></div>
+	</div>
+	<div id="legend"></div>
+
+	<script>
+	{% autoescape false %}
+	var indoor = {{indoor}};
+	var outdoor = {{outdoor}};
+	{% endautoescape %}
+
+	var palette = new Rickshaw.Color.Palette();
+
+	var graph = new Rickshaw.Graph({
+		element: document.querySelector("#chart"),
+		renderer: 'line',
+		width: 580,
+		height: 250,
+		min: 'auto',
+		series : [
+		{
+			name: 'Indoor',
+			data: indoor,
+			color: palette.color()
+		},
+		{
+			name: 'Outdoor',
+			data: outdoor,
+			color: palette.color()
+		}]
+	});
+
+	var x_axis = new Rickshaw.Graph.Axis.Time({
+		graph: graph
+	});
+
+	var y_axis = new Rickshaw.Graph.Axis.Y({
+		graph: graph,
+		orientation: 'left',
+		tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+		element: document.getElementById('y_axis'),
+	});
+
+	var legend = new Rickshaw.Graph.Legend({
+		element: document.querySelector('#legend'),
+		graph: graph
+	});
+
+	var highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
+		graph: graph,
+		legend: legend
+	});
+
+	graph.render();
+	</script>
+</body>
+</html>
