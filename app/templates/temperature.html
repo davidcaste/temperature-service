@@ -1,7 +1,7 @@
 <html>
 <head>
 	{% if title %}
-		<title>{{title}} - home temperature</title>
+		<title>{{samples.date}} - home temperature</title>
 	{% else %}
 		<title>home temperature</title>
 	{% endif %}
@@ -31,6 +31,7 @@
 
 	#legend {
 		display: inline-block;
+		left: 40px;
 		vertical-align: top;
 		margin: 0 0 0 10px;
 	}
@@ -39,7 +40,7 @@
 <body>
 	<div>Home temperature: <a href="/index">Home</a></div>
 	<hr>
-	<h1>{{period}} temperature!</h1>
+	<h1>{{samples.date}}</h1>
 
 	<div id="chart_container">
 		<div id="y_axis"></div>
@@ -47,10 +48,20 @@
 	</div>
 	<div id="legend"></div>
 
+	<div id="stats">
+	<h2>Temperature stats</h2>
+		<ul>
+			<li>Max indoor: {{samples.max_indoor}} C</li>
+			<li>Min indoor: {{samples.min_indoor}} C</li>
+			<li>Max outdoor: {{samples.max_outdoor}} C</li>
+			<li>Min outdoor: {{samples.min_outdoor}} C</li>
+		</ul>
+	</div>
+
 	<script>
 	{% autoescape false %}
-	var indoor = {{indoor}};
-	var outdoor = {{outdoor}};
+	var indoor = {{samples.indoor}};
+	var outdoor = {{samples.outdoor}};
 	{% endautoescape %}
 
 	var palette = new Rickshaw.Color.Palette();
@@ -96,6 +107,16 @@
 	});
 
 	graph.render();
+
+	var hoverDetail = new Rickshaw.Graph.HoverDetail({
+		graph: graph,
+		formatter: function(series, x, y) {
+			var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
+			var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
+			var content = swatch + series.name + ": " + parseFloat(y) + '<br>' + date;
+			return content;
+		}
+	});
 	</script>
 </body>
 </html>

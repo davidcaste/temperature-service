@@ -1,6 +1,6 @@
-from flask import redirect, render_template, url_for
+from flask import abort, redirect, render_template
 from app import app
-from models import read_logs
+from models import DaySample, read_logs
 
 import datetime
 
@@ -14,12 +14,13 @@ def index():
 
 @app.route('/<int:year>/<int:month>/<int:day>')
 def daily_temperature(year, month, day):
-    indoor, outdoor = read_logs(year, month, day)
+    try:
+        samples = DaySample(year, month, day)
+    except:
+        abort(404)
+
     return render_template('temperature.html',
-                           title='Daily',
-                           period='day',
-                           indoor=indoor,
-                           outdoor=outdoor)
+                           samples=samples)
 
 
 @app.route('/<int:year>/<int:month>')
@@ -40,3 +41,13 @@ def anual_temperature(year):
                            period='year',
                            indoor=indoor,
                            outdoor=outdoor)
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('500.html'), 500
