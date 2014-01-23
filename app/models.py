@@ -92,6 +92,22 @@ class DaySample(GenericPeriodSamples):
         self.sample_data['min_outdoor'] = min(outdoor_samples)
         self.sample_data['average_outdoor'] = sum(outdoor_samples) / float(len(outdoor_samples))
 
+    def next(self):
+        day = datetime.timedelta(days=1)
+        next_day = datetime.date(self.year, self.month, self.day) + day
+        try:
+            return DaySample(next_day.year, next_day.month, next_day.day)
+        except NonExistantLogsError:
+            return None
+
+    def previous(self):
+        day = datetime.timedelta(days=1)
+        prev_day = datetime.date(self.year, self.month, self.day) - day
+        try:
+            return DaySample(prev_day.year, prev_day.month, prev_day.day)
+        except NonExistantLogsError:
+            return None
+
     @property
     def indoor_samples(self):
         return self.sample_data['indoor_samples']
@@ -206,6 +222,22 @@ class MonthSample(PeriodWithMaxMinAverageSample):
                 if (today.year != self.year) or (today.month != self.month):
                     pickle.dump(self.sample_data, pickle_file)
 
+    def next(self):
+        date = datetime.date(self.year, self.month, 15)
+        next_month = date + datetime.timedelta(days=31)
+        try:
+            return MonthSample(next_month.year, next_month.month)
+        except:
+            return None
+
+    def previous(self):
+        date = datetime.date(self.year, self.month, 15)
+        next_month = date - datetime.timedelta(days=31)
+        try:
+            return MonthSample(next_month.year, next_month.month)
+        except:
+            return None
+
 
 class YearSample(PeriodWithMaxMinAverageSample):
     def __init__(self, year):
@@ -237,3 +269,19 @@ class YearSample(PeriodWithMaxMinAverageSample):
                 today = datetime.date.today()
                 if today.year != self.year:
                     pickle.dump(self.sample_data, pickle_file)
+
+    def next(self):
+        date = datetime.date(self.year, 6, 15)
+        next_year = date + datetime.timedelta(days=365)
+        try:
+            return YearSample(next_year.year)
+        except:
+            return None
+
+    def previous(self):
+        date = datetime.date(self.year, 6, 15)
+        next_year = date - datetime.timedelta(days=365)
+        try:
+            return YearSample(next_year.year)
+        except:
+            return None
