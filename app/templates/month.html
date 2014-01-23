@@ -29,6 +29,12 @@
 		width: 40px;
 	}
 
+	#x_axis {
+		position: relative;
+		left: 40px;
+		height: 40px;
+	}
+
 	#legend {
 		display: inline-block;
 		left: 40px;
@@ -45,6 +51,7 @@
 	<div id="chart_container">
 		<div id="y_axis"></div>
 		<div id="chart"></div>
+		<div id="x_axis"></div>
 	</div>
 	<div id="legend"></div>
 
@@ -60,8 +67,12 @@
 
 	<script>
 	{% autoescape false %}
-	var indoor = {{samples.indoor_samples}};
-	var outdoor = {{samples.outdoor_samples}};
+	var max_indoor = {{samples.max_indoor_samples}};
+	var average_indoor = {{samples.average_indoor_samples}};
+	var min_indoor = {{samples.min_indoor_samples}};
+	var max_outdoor = {{samples.max_outdoor_samples}};
+	var average_outdoor = {{samples.average_outdoor_samples}};
+	var min_outdoor = {{samples.min_outdoor_samples}};
 	{% endautoescape %}
 
 	var palette = new Rickshaw.Color.Palette();
@@ -74,19 +85,41 @@
 		min: 'auto',
 		series : [
 		{
-			name: 'Indoor',
-			data: indoor,
+			name: 'Max indoor',
+			data: max_indoor,
 			color: palette.color()
 		},
 		{
-			name: 'Outdoor',
-			data: outdoor,
+			name: 'Average indoor',
+			data: average_indoor,
+			color: palette.color()
+		},
+		{
+			name: 'Min indoor',
+			data: min_indoor,
+			color: palette.color()
+		},
+		{
+			name: 'Max outdoor',
+			data: max_outdoor,
+			color: palette.color()
+		},
+		{
+			name: 'Average outdoor',
+			data: average_outdoor,
+			color: palette.color()
+		},
+		{
+			name: 'Min outdoor',
+			data: min_outdoor,
 			color: palette.color()
 		}]
 	});
 
-	var x_axis = new Rickshaw.Graph.Axis.Time({
-		graph: graph
+	var x_axis = new Rickshaw.Graph.Axis.X({
+		graph: graph,
+		orientation: 'bottom',
+		element: document.getElementById('x_axis')
 	});
 
 	var y_axis = new Rickshaw.Graph.Axis.Y({

@@ -1,6 +1,6 @@
 from flask import abort, redirect, render_template
 from app import app
-from models import DaySample, read_logs
+from models import DaySample, MonthSample, YearSample, NonExistantLogsError
 
 import datetime
 
@@ -16,8 +16,10 @@ def index():
 def daily_temperature(year, month, day):
     try:
         samples = DaySample(year, month, day)
-    except:
+    except NonExistantLogsError:
         abort(404)
+    except:
+        abort(500)
 
     return render_template('temperature.html',
                            samples=samples)
@@ -25,22 +27,28 @@ def daily_temperature(year, month, day):
 
 @app.route('/<int:year>/<int:month>')
 def monthly_temperature(year, month):
-    indoor, outdoor = read_logs(year, month)
-    return render_template('temperature.html',
-                           title='Monthly',
-                           period='month',
-                           indoor=indoor,
-                           outdoor=outdoor)
+    try:
+        samples = MonthSample(year, month)
+    except NonExistantLogsError:
+        abort(404)
+    except:
+        abort(500)
+
+    return render_template('month.html',
+                           samples=samples)
 
 
 @app.route('/<int:year>')
 def anual_temperature(year):
-    indoor, outdoor = read_logs(year)
-    return render_template('temperature.html',
-                           title='Annual',
-                           period='year',
-                           indoor=indoor,
-                           outdoor=outdoor)
+    try:
+        samples = YearSample(year)
+    except NonExistantLogsError:
+        abort(404)
+    except:
+        abort(500)
+
+    return render_template('month.html',
+                           samples=samples)
 
 
 @app.errorhandler(404)
