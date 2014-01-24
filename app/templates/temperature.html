@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 	{% if title %}
@@ -5,21 +6,40 @@
 	{% else %}
 		<title>home temperature</title>
 	{% endif %}
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
 	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.4.6/rickshaw.min.css">
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/2.7.4/d3.min.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/2.7.4/d3.layout.min.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.4.6/rickshaw.min.js"></script>
 
 	<style>
+	body {
+		padding-top: 50px;
+	}
+
+	.breadcrumb {
+		margin-top: 20px;
+		margin-bottom: 0;
+	}
+
+	.page-header {
+		margin-top: 20px;
+	}
+
 	#chart_container {
 		position: relative;
 		display: inline-block;
-		font-family: Arial, Helvetiva, sans-serif;
+		width: 100%;
 	}
 
 	#chart  {
-		position: inline-block;
-		left: 40px;
+		display: inline-block;
+		width: 95%;
+		width: calc(100% - 40px);
+		margin-left: 40px;
 	}
 
 	#y_axis {
@@ -30,33 +50,85 @@
 	}
 
 	#legend {
-		display: inline-block;
-		left: 40px;
+		position: absolute;
+		bottom: 10px;
+		right: 5px;
 		vertical-align: top;
-		margin: 0 0 0 10px;
+	}
+
+	.rickshaw_legend {
+		padding: 7px 5px;
+		background: rgba(64, 64, 64, 0.7);
 	}
 	</style>
 </head>
 <body>
-	<div>Home temperature: <a href="/index">Home</a></div>
-	<hr>
-	<h1>{{samples.date}}</h1>
 
-	<div id="chart_container">
-		<div id="y_axis"></div>
-		<div id="chart"></div>
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Temperature</a>
+			</div>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#about">About</a></li>
+				</ul>
+			</div><!-- /.nav-collapse -->
+		</div>
 	</div>
-	<div id="legend"></div>
 
-	<div id="stats">
-	<h2>Temperature stats</h2>
-		<ul>
-			<li>Max indoor: {{samples.max_indoor}} C</li>
-			<li>Min indoor: {{samples.min_indoor}} C</li>
-			<li>Max outdoor: {{samples.max_outdoor}} C</li>
-			<li>Min outdoor: {{samples.min_outdoor}} C</li>
+	<div class="container">
+
+		<ol class="breadcrumb">
+			<li><a href="#">2013</a></li>
+			<li><a href="#">12</a></li>
+			<li class="active">16</li>
+		</ol>
+
+		<div class="page-header">
+			<h1>{{'%d/%d/%d' % (samples.year, samples.month, samples.day)}}</h1>
+		</div>
+
+		<div class="row">
+			<div class="col-md-8">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div id="chart_container">
+							<div id="y_axis"></div>
+							<div id="chart"></div>
+							<div id="legend"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Day statistics</h3>
+					</div>
+					<div class="panel-body">
+						<ul>
+							<li>Max indoor: {{samples.max_indoor}} C</li>
+							<li>Min indoor: {{samples.min_indoor}} C</li>
+							<li>Max outdoor: {{samples.max_outdoor}} C</li>
+							<li>Min outdoor: {{samples.min_outdoor}} C</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<ul class="pager">
+			<li><a href="#">&larr; Older</a></li>
+			<li><a href="#">Newer &rarr;</a></li>
 		</ul>
-	</div>
+	</div> <!-- /.container -->
 
 	<script>
 	{% autoescape false %}
@@ -69,8 +141,8 @@
 	var graph = new Rickshaw.Graph({
 		element: document.querySelector("#chart"),
 		renderer: 'line',
-		width: 580,
-		height: 250,
+		//width: 580,
+		//height: 250,
 		min: 'auto',
 		series : [
 		{
