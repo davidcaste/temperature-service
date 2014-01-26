@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block title %}
-<h1>{{ '%d/%d/%d' % (samples.year, samples.month, samples.day) }}</h1>
+<h1>{{ momentjs('%d-%d-%d' % (samples.year, samples.month, samples.day)).format('dddd, MMMM D YYYY') }}</h1>
 {% endblock %}
 
 {% block content %}
