@@ -4,11 +4,12 @@
 {% block breadcrumb %}
 <li><a href="/"><span class="glyphicon glyphicon-home"></span></a>
 <li><a href="{{'/%d' % samples.year}}">{{ samples.year }}</a></li>
-<li class="active">{{ samples.month }}</li>
+<li><a href="{{'/%d/%d' % (samples.year, samples.month)}}">{{ samples.month }}</a></li>
+<li class="active">{{ samples.day }}</li>
 {% endblock %}
 
 {% block title %}
-<h1>{{ '%d/%d' % (samples.year, samples.month) }}</h1>
+<h1>{{ '%d/%d/%d' % (samples.year, samples.month, samples.day) }}</h1>
 {% endblock %}
 
 {% block content %}
@@ -28,7 +29,7 @@
 	<div class="col-md-4">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h3 class="panel-title">Month statistics</h3>
+				<h3 class="panel-title">Day statistics</h3>
 			</div>
 			<div class="panel-body">
 				<ul>
@@ -42,56 +43,33 @@
 	</div>
 </div>
 
-
 <script>
 {% autoescape false %}
-var max_indoor = {{samples.max_indoor_samples}};
-var average_indoor = {{samples.average_indoor_samples}};
-var min_indoor = {{samples.min_indoor_samples}};
-var max_outdoor = {{samples.max_outdoor_samples}};
-var average_outdoor = {{samples.average_outdoor_samples}};
-var min_outdoor = {{samples.min_outdoor_samples}};
+var indoor = {{samples.indoor_samples}};
+var outdoor = {{samples.outdoor_samples}};
 {% endautoescape %}
-	var palette = new Rickshaw.Color.Palette();
-	var graph = new Rickshaw.Graph({
+
+var palette = new Rickshaw.Color.Palette();
+
+var graph = new Rickshaw.Graph({
 	element: document.querySelector("#chart"),
 	renderer: 'line',
 	min: 'auto',
 	series : [
 	{
-		name: 'Max indoor',
-		data: max_indoor,
+		name: 'Indoor',
+		data: indoor,
 		color: palette.color()
 	},
 	{
-		name: 'Average indoor',
-		data: average_indoor,
-		color: palette.color()
-	},
-	{
-		name: 'Min indoor',
-		data: min_indoor,
-		color: palette.color()
-	},
-	{
-		name: 'Max outdoor',
-		data: max_outdoor,
-		color: palette.color()
-	},
-	{
-		name: 'Average outdoor',
-		data: average_outdoor,
-		color: palette.color()
-	},
-	{
-		name: 'Min outdoor',
-		data: min_outdoor,
+		name: 'Outdoor',
+		data: outdoor,
 		color: palette.color()
 	}]
 });
 
-var x_axis = new Rickshaw.Graph.Axis.X({
-graph: graph,
+var x_axis = new Rickshaw.Graph.Axis.Time({
+	graph: graph,
 	orientation: 'bottom',
 	element: document.getElementById('x_axis')
 });

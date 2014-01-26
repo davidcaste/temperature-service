@@ -92,6 +92,7 @@ class DaySample(GenericPeriodSamples):
         self.sample_data['min_outdoor'] = min(outdoor_samples)
         self.sample_data['average_outdoor'] = sum(outdoor_samples) / float(len(outdoor_samples))
 
+    @property
     def next(self):
         day = datetime.timedelta(days=1)
         next_day = datetime.date(self.year, self.month, self.day) + day
@@ -100,6 +101,7 @@ class DaySample(GenericPeriodSamples):
         except NonExistantLogsError:
             return None
 
+    @property
     def previous(self):
         day = datetime.timedelta(days=1)
         prev_day = datetime.date(self.year, self.month, self.day) - day
@@ -107,6 +109,10 @@ class DaySample(GenericPeriodSamples):
             return DaySample(prev_day.year, prev_day.month, prev_day.day)
         except NonExistantLogsError:
             return None
+
+    @property
+    def url(self):
+        return '/%d/%d/%d' % (self.year, self.month, self.day)
 
     @property
     def indoor_samples(self):
@@ -222,6 +228,7 @@ class MonthSample(PeriodWithMaxMinAverageSample):
                 if (today.year != self.year) or (today.month != self.month):
                     pickle.dump(self.sample_data, pickle_file)
 
+    @property
     def next(self):
         date = datetime.date(self.year, self.month, 15)
         next_month = date + datetime.timedelta(days=31)
@@ -230,6 +237,7 @@ class MonthSample(PeriodWithMaxMinAverageSample):
         except:
             return None
 
+    @property
     def previous(self):
         date = datetime.date(self.year, self.month, 15)
         next_month = date - datetime.timedelta(days=31)
@@ -237,6 +245,10 @@ class MonthSample(PeriodWithMaxMinAverageSample):
             return MonthSample(next_month.year, next_month.month)
         except:
             return None
+
+    @property
+    def url(self):
+        return '/%d/%d' % (self.year, self.month)
 
 
 class YearSample(PeriodWithMaxMinAverageSample):
@@ -270,6 +282,7 @@ class YearSample(PeriodWithMaxMinAverageSample):
                 if today.year != self.year:
                     pickle.dump(self.sample_data, pickle_file)
 
+    @property
     def next(self):
         date = datetime.date(self.year, 6, 15)
         next_year = date + datetime.timedelta(days=365)
@@ -278,6 +291,7 @@ class YearSample(PeriodWithMaxMinAverageSample):
         except:
             return None
 
+    @property
     def previous(self):
         date = datetime.date(self.year, 6, 15)
         next_year = date - datetime.timedelta(days=365)
@@ -285,3 +299,7 @@ class YearSample(PeriodWithMaxMinAverageSample):
             return YearSample(next_year.year)
         except:
             return None
+
+    @property
+    def url(self):
+        return '/%d' % self.year

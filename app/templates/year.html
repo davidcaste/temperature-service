@@ -3,12 +3,11 @@
 
 {% block breadcrumb %}
 <li><a href="/"><span class="glyphicon glyphicon-home"></span></a>
-<li><a href="{{'/%d' % samples.year}}">{{ samples.year }}</a></li>
-<li class="active">{{ samples.month }}</li>
+<li class="active">{{ samples.year }}</li>
 {% endblock %}
 
 {% block title %}
-<h1>{{ '%d/%d' % (samples.year, samples.month) }}</h1>
+<h1>{{ '%d' % (samples.year) }}</h1>
 {% endblock %}
 
 {% block content %}

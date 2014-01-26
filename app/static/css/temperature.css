@@ -1,0 +1,50 @@
+body {
+	padding-top: 50px;
+}
+
+.breadcrumb {
+	margin-top: 20px;
+	margin-bottom: 0;
+}
+
+.page-header {
+	margin-top: 20px;
+}
+
+#chart_container {
+	position: relative;
+	display: inline-block;
+	width: calc(100% - 40px);
+}
+
+#chart  {
+	position: inline-block;
+	left: 40px;
+}
+
+#y_axis {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 40px;
+}
+
+#x_axis {
+	position: relative;
+	left: 40px;
+	height: 40px;
+}
+
+#legend {
+	/*width: 100%;*/
+	text-align: center;
+}
+
+#legend li {
+	display: inline;
+}
+
+.rickshaw_legend {
+	padding: 7px 5px;
+	background: rgba(64, 64, 64, 0.7);
+}

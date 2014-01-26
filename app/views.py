@@ -21,7 +21,7 @@ def daily_temperature(year, month, day):
     except:
         abort(500)
 
-    return render_template('temperature.html',
+    return render_template('day.html',
                            samples=samples)
 
 
@@ -47,7 +47,7 @@ def anual_temperature(year):
     except:
         abort(500)
 
-    return render_template('month.html',
+    return render_template('year.html',
                            samples=samples)
 
 
