@@ -1,17 +1,19 @@
 <!-- extend base layout -->
-{% extends "base.html" %}
+{% extends "samples.html" %}
 
 {% block breadcrumb %}
-<li><a href="/"><span class="glyphicon glyphicon-home"></span></a>
-<li><a href="{{'/%d' % samples.year}}">{{ samples.year }}</a></li>
-<li class="active">{{ samples.month }}</li>
+<ol class="breadcrumb">
+	<li><a href="/"><span class="glyphicon glyphicon-home"></span></a>
+	<li><a href="{{'/%d' % samples.year}}">{{ samples.year }}</a></li>
+	<li class="active">{{ samples.month }}</li>
+</ol>
 {% endblock %}
 
 {% block title %}
 <h1>{{ momentjs('%d-%d' % (samples.year, samples.month)).format('MMMM YYYY') }}</h1>
 {% endblock %}
 
-{% block content %}
+{% block samples_content %}
 <div class="row">
 	<div class="col-md-8">
 		<div class="panel panel-default">

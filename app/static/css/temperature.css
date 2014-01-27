@@ -48,3 +48,20 @@ body {
 	padding: 7px 5px;
 	background: rgba(64, 64, 64, 0.7);
 }
+
+.temp_big {
+	text-align: center;
+	font-size: 400%;
+}
+
+.temp_medium {
+	text-align: center;
+	font-size: 200%;
+}
+
+.temp_small {
+	text-align: center;
+	font-size: 80%;
+}
+
+}

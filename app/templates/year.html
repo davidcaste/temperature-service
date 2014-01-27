@@ -1,16 +1,18 @@
 <!-- extend base layout -->
-{% extends "base.html" %}
+{% extends "samples.html" %}
 
 {% block breadcrumb %}
-<li><a href="/"><span class="glyphicon glyphicon-home"></span></a>
-<li class="active">{{ samples.year }}</li>
+<ol class="breadcrumb">
+	<li><a href="/"><span class="glyphicon glyphicon-home"></span></a>
+	<li class="active">{{ samples.year }}</li>
+</ol>
 {% endblock %}
 
 {% block title %}
 <h1>{{ '%d' % (samples.year) }}</h1>
 {% endblock %}
 
-{% block content %}
+{% block samples_content %}
 <div class="row">
 	<div class="col-md-8">
 		<div class="panel panel-default">

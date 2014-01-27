@@ -1,0 +1,21 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+{% block samples_content %}{% endblock %}
+
+<ul class="pager">
+	{% if samples.previous %}
+	<li class="previous"><a href="{{ samples.previous.url }}">&larr; Older</a></li>
+	{% else %}
+	<li class="previous disabled"><a href="#">&larr; Older</a></li>
+	{% endif %}
+	{% if samples.next %}
+	<li class="next"><a href="{{ samples.next.url }}">Newer &rarr;</a></li>
+	{% else %}
+	<li class="next disabled"><a href="#">Newer &rarr;</a></li>
+	{% endif %}
+</ul>
+
+{% endblock %}

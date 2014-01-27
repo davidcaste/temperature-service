@@ -1,6 +1,7 @@
 from flask import abort, redirect, render_template
 from app import app
 from models import DaySample, MonthSample, YearSample, NonExistantLogsError
+from temperature import YahooTemp
 
 import datetime
 
@@ -9,7 +10,11 @@ import datetime
 @app.route('/index')
 def index():
     now = datetime.datetime.now()
-    return redirect('%s/%s/%s' % (now.year, now.month, now.day))
+
+    yahoo = YahooTemp()
+    #return redirect('%s/%s/%s' % (now.year, now.month, now.day))
+    return render_template('wellcome.html',
+                           condition=yahoo.condition)
 
 
 @app.route('/<int:year>/<int:month>/<int:day>')

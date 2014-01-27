@@ -1,0 +1,40 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block title %}
+<h1>today</h1>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-6">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Current indoor temperature</h3>
+			</div>
+			<div class="panel-body">
+				<div class="temp_big">12.3 C</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Current outdoor temperature</h3>
+			</div>
+			<div class="panel-body">
+				<div class="temp_big">
+					{% if 'icon' in condition %}
+						<img src="{{'/static/images/weather/%s' % condition['icon']}}" alt="{{ condition['text'] }}">
+					{% else %}
+						<span class="glyphicon glyphicon-question-sign"></span>
+					{% endif %}
+					{{ '%s C' % condition['temp'] }}
+				</div>
+				<p class="temp_medium">{{ condition['text'] }}</p>
+				<p class="temp_small"><a href="{{ condition['link'] }}">{{ condition['title'] }}</a></p>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
